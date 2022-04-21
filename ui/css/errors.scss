@@ -1,0 +1,47 @@
+.critical-error-container {
+  color: var(--color-text-default);
+  background-color: var(--color-background-default);
+  border: 1px solid var(--color-info-default);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 18px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  position: relative;
+}
+
+.critical-error-div {
+  color: red;
+  background-color: yellow;
+  text-align: left;
+}
+
+.critical-error-bq {
+  margin: 20px 0 20px 5px;
+  padding-left: 5px;
+  border-left: 1px solid grey;
+  max-width: 100%;
+}
+
+.critical-error-anchor {
+  color: blue;
+}
+
+.critical-error-anchor:hover {
+  color: green;
+}
+
+#loading__logo {
+  width: 10rem;
+  height: 10rem;
+  align-self: center;
+  margin: 10rem 0 0 0;
+}
+
+#loading__spinner {
+  width: 2rem;
+  height: 2rem;
+  align-self: center;
+  margin-top: 1rem;
+}

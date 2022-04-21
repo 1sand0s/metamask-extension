@@ -11,8 +11,7 @@ import Eth from 'ethjs';
 import EthQuery from 'eth-query';
 import StreamProvider from 'web3-stream-provider';
 import log from 'loglevel';
-import fetch from 'node-fetch';
-import launchMetaMaskUi from '../../ui';
+import launchMetaMaskUi, { setupLocale } from '../../ui';
 import {
   ENVIRONMENT_TYPE_FULLSCREEN,
   ENVIRONMENT_TYPE_POPUP,
@@ -29,40 +28,40 @@ start().catch(log.error);
 async function start() {
   const preferredLocale = await getFirstPreferredLangCode();
 
-  const url = browser.runtime.getURL(
-    `../_locales/${preferredLocale}/messages.json`,
+  const { currentLocaleMessages, enLocaleMessages } = await setupLocale(
+    preferredLocale,
   );
-  const messages = await (await fetch(url)).json();
 
   function displayCriticalError(container, err, msg) {
-    const html = `
-    <style>
-      #app-content {margin: 10px;}
-      .critical-error {
-        color:red; 
-        background-color:yellow; 
-        text-align: left
+    const t = (key) => {
+      let message;
+      try {
+        message = currentLocaleMessages[key].message;
+      } finally {
+        if (!message) {
+          message = enLocaleMessages[key].message;
+        }
       }
-      blockquote {
-        margin: 20px 0 20px 5px; 
-        padding-left: 5px; 
-        border-left: 1px solid grey
-      }  
-      a {color: blue}
-      a:hover {color: green}
-    </style>
-    <div class="critical-error">
-      ${messages[msg].message}
-    </div>
-    <blockquote>
-      ${err.stack}
+
+      return message;
+    };
+
+    const html = `
+    <div class="critical-error-container">
+      <div class="critical-error-div">
+        ${t(msg)}
+      </div>
+      <blockquote class="critical-error-bq">
+        ${err.stack}
       </blockquote>
-    <a href=${SUPPORT_LINK} target="_blank" rel="noopener noreferrer">
-      ${messages.needHelpLinkText.message}    
-    </a>  
+      <a href=${SUPPORT_LINK} class="critical-error-anchor" target="_blank" rel="noopener noreferrer">
+        ${t('needHelpLinkText')}
+      </a>  
+    </div>
     `;
+
     container.innerHTML = html;
-    // container.style.height = '80px';
+
     log.error(err.stack);
     throw err;
   }
@@ -94,7 +93,7 @@ async function start() {
     const container = document.getElementById('app-content');
     initializeUi(tab, container, connectionStream, (err, store) => {
       if (err) {
-        displayCriticalError(container, err, 'failedToLoadMessage');
+        displayCriticalError(container, err, 'backgroundPortClosedError');
         return;
       }
 

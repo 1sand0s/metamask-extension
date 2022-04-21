@@ -326,7 +326,7 @@
     "message": "Back to All"
   },
   "backgroundPortClosedError": {
-    "message": "Your connection to Metamask was interrupted. Quit your browser and try again. If issue persists, please log a bug report by clicking on Metamask link below"
+    "message": "Your connection to MetaMask was interrupted. Quit your browser and try again. If this issue persists, please log a bug report by clicking on the link below"
   },
   "backupApprovalInfo": {
     "message": "This secret code is required to recover your wallet in case you lose your device, forget your password, have to re-install MetaMask, or want to access your wallet on another device."
